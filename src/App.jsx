@@ -10,6 +10,7 @@ import Players from "./players";
 import AppCounter from "./task01";
 import ShowHideApp from "./task02";
 import UserList from "./task03";
+import Comments from "./userComments";
 
 const fetchUsers = fetch("https://jsonplaceholder.typicode.com/users").then(
   (response) => response.json()
@@ -33,11 +34,17 @@ const user_list = async () => {
   return response.json();
 };
 
+// async await comments
+const user_Comments = async () => {
+  const response = await fetch("https://jsonplaceholder.typicode.com/comments");
+  return response.json();
+};
+
 function App() {
   const friendsPromise = fetchFriends();
   const postsUser = usersPost();
-
   const userLists = user_list();
+  const useComments = user_Comments();
 
   // function handleClick() {
   //   alert("I am react");
@@ -65,9 +72,12 @@ function App() {
   return (
     <>
       <h1>Introduction to React Part 2</h1>
+      <Suspense fallback="Comments are loading">
+        <Comments useComments ={useComments}></Comments>
+      </Suspense>
 
       <Suspense fallback={<h3>Users are loading ...</h3>}>
-        <UserList userLists = {userLists}></UserList>
+        <UserList userLists={userLists}></UserList>
       </Suspense>
 
       <ShowHideApp></ShowHideApp>
