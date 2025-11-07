@@ -1,9 +1,25 @@
 import "./App.css";
 import Counter from "./counter";
-import Batsman from './batsman';
+import Batsman from "./batsman";
 import Bowler from "./bowler";
+import Users from "./users";
+import { Suspense } from "react";
+import Friends from "./friends";
+
+const fetchUsers = fetch("https://jsonplaceholder.typicode.com/users").then(
+  (response) => response.json()
+);
+
+// another way [async await]
+const fetchFriends = async() => {
+  const res = await(fetch("https://jsonplaceholder.typicode.com/users"));
+  return res.json();
+
+}
 
 function App() {
+
+  const friendsPromise = fetchFriends();
 
   // function handleClick() {
   //   alert("I am react");
@@ -31,6 +47,15 @@ function App() {
   return (
     <>
       <h1>Introduction to React Part 2</h1>
+
+      <Suspense fallback={<h3>Friends are coming ...</h3>}>
+        <Friends friendsPromise = {friendsPromise}></Friends>
+      </Suspense>
+      
+      <Suspense fallback={<h3>Loading ...</h3>}>
+        <Users fetchUsers = {fetchUsers}></Users>
+      </Suspense>
+
       <Bowler></Bowler>
       <Batsman></Batsman>
       <Counter></Counter>
@@ -58,7 +83,6 @@ function App() {
 }
 
 export default App;
-
 
 // function useState(initialVal) {
 //     let state = initialVal;
